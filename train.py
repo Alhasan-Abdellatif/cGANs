@@ -36,11 +36,6 @@ np.random.seed(seed)
     
 
 #parameters
-batch_size = args.batch_size
-G_b_size = args.G_batch_size
-if G_b_size is None:
-    G_b_size = batch_size
-
 disc_iters = args.disc_iters
 loss_fun = args.loss
 epochs = args.epochs
@@ -179,13 +174,11 @@ def train(num_epochs=1, disc_iters=1):
                 elif loss_fun == 'standard':
                     adv_labels = torch.FloatTensor(1).fill_(label_t).expand_as(real_logit).to(device)
                     D_loss_real = dis_criterion(real_logit,adv_labels)
-                elif loss_fun == 'wgan':
-                    D_loss_real = -torch.mean(real_logit)
                     
                 D_loss_real.backward()
 
                 # update with fake labels
-                fake_x, fake_y = sample_from_gen(args,G_b_size, zdim, n_cl, netG,device,real_y=real_y)
+                fake_x, fake_y = sample_from_gen(args,b_size, zdim, n_cl, netG,device,real_y=real_y)
                 fake_logit = netD(fake_x.detach(),fake_y)
                     
                 if loss_fun == 'hinge':  
@@ -193,18 +186,15 @@ def train(num_epochs=1, disc_iters=1):
                 elif loss_fun == 'standard':
                     adv_labels = torch.FloatTensor(1).fill_(label_f).expand_as(fake_logit).to(device)
                     D_loss_fake = dis_criterion(fake_logit,adv_labels) 
-                elif loss_fun == 'wgan':
-                    D_loss_fake = torch.mean(fake_logit)
-
 
                 D_loss_fake.backward()
                 optimizerD.step()
-                D_running_loss += (D_loss_fake.item()*G_b_size + D_loss_real.item()*b_size)
+                D_running_loss += (D_loss_fake.item()*b_size + D_loss_real.item()*b_size)
                 
            # Update G
             netG.zero_grad()
             if args.x_fake_GD is False:
-                fake_x, fake_y = sample_from_gen(args,G_b_size, zdim, n_cl, netG,device,real_y=real_y)
+                fake_x, fake_y = sample_from_gen(args,b_size, zdim, n_cl, netG,device,real_y=real_y)
             fake_logit = netD(fake_x,fake_y)
 
             if loss_fun == 'hinge':
@@ -212,15 +202,12 @@ def train(num_epochs=1, disc_iters=1):
             elif loss_fun == 'standard':
                 adv_labels = torch.FloatTensor(1).fill_(label_t).expand_as(fake_logit).to(device)
                 _G_loss = dis_criterion(fake_logit, adv_labels)
-            elif loss_fun == 'wgan':
-                _G_loss = -torch.mean(fake_logit)
                 
             _G_loss.backward()
             optimizerG.step()
-            G_running_loss += _G_loss.item()*G_b_size
+            G_running_loss += _G_loss.item()*b_size
             
-            running_examples_D+= b_size
-            running_examples_G+= G_b_size
+            running_examples_G+= b_size
             
             if args.ema:
                 with torch.no_grad():
