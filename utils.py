@@ -40,9 +40,6 @@ def prepare_parser():
                        ,help = 'labels path')
     parser.add_argument('--data_ext', type=str, default='txt'
                        ,help = 'data extension txt, png')
-                        
-    parser.add_argument('--remove_splay', default=False,action='store_true'
-                       ,help = 'remove splays from rgb channels')
     parser.add_argument('--sampling', type=int, default=None
                        ,help = 'randomly sample --sampling instances from the training data if not None')
     # models settings
@@ -66,7 +63,7 @@ def prepare_parser():
                         ,help = 'use leaky relu activation for discriminator with leak= leak_G,zero value will use RELU')
     parser.add_argument('--zdim', type=int, default=128
                         ,help ='dimenstion of latent vector')
-    parser.add_argument('--spec_norm_D', default=True,action='store_false'
+    parser.add_argument('--spec_norm_D', default=False,action='store_true'
                        ,help = 'apply spectral normalization in discriminator')
     parser.add_argument('--spec_norm_G', default=False,action='store_true'
                        ,help = 'apply spectral normalization in generator')
@@ -114,7 +111,7 @@ def prepare_parser():
                        ,help = 'None to use random seed can be fixed for reporoduction')
     parser.add_argument('--z_dist', type=str, default='normal'
                        , help = ' distribution of latent space normal/uniform')
-    parser.add_argument('--smooth',default=True,action='store_false'
+    parser.add_argument('--smooth',default=False,action='store_true'
                        , help = 'Use smooth labeling if True')
      
     parser.add_argument('--print_acc_t',action='store_true' , default=False
@@ -155,35 +152,6 @@ def prepare_parser():
     parser.add_argument('--x_fake_GD', action='store_true' , default=False
                         ,help='Use same fake data for both G and D')
     return parser
-
-
-# these arguments apply only when running sample.py file to generate images.                        
-def add_sample_parser(parser):
-                        
-    # paths                    
-    parser.add_argument('--G_cp', type=str, default=None
-                        ,help='path of generator checkpoint .pth file ')
-    parser.add_argument('--out_path', type=str, default='out'
-                       ,help = 'path to save images')
-    parser.add_argument('--many', type=str, default=None
-                        ,help='dir of the folder that contains .pth files to generate from multiple checkpoints')                 
-    parser.add_argument('--truncated', type=float, default=0
-                        ,help = 'if greater than 0 it will apply a truncation to normal dist. with --truncated value')
-    parser.add_argument('--num_imgs', type=int, default=1000
-                       , help = 'number of images to be generated')
-    parser.add_argument('--img_name', type=str, default=''
-                       ,help = 'append a string to the generate images numbers')
-                                          
-    # Genertared images configuration                    
-    parser.add_argument('--figure', type=str, default='grid'
-                        ,help='grid to save a grid of generated images or images to save them in --out_path')
-    parser.add_argument('--grid_rows', type=int, default=3
-                        ,help='num of rows in the grid')
-    parser.add_argument('--gray2rgb', default=True,action='store_false'
-                        ,help='If True save single-channel images as 3 channels')
-    return parser
-
-
 
 def prepare_device(args):
     # Device
@@ -250,7 +218,6 @@ def prepare_data(args):
         train_data = channels_datasets.Channels(path = args.data_path
                                                 ,labels_path=args.labels_path
                                                 ,ext = args.data_ext
-                                                ,remove_splay = args.remove_splay
                                                 ,sampling = args.sampling)
 
     else:
