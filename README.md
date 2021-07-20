@@ -1,27 +1,25 @@
 # GANs
-This repository provides a pytorch implementation of recent GANs models including
+This repository provides a pytorch implementation of a variety of GANs models including
 [SN-GANs](https://arxiv.org/abs/1802.05957) - with both DCGAN and Residual architecture.
-[SA-GANs](https://arxiv.org/abs/1805.08318) - which uses attention mechanism on an intermeidate layer of G and D.
+[SA-GANs](https://arxiv.org/abs/1805.08318) - which uses attention mechanism on intermeidate layers of G and D.
 
-For Conditional-GANs models, conditional-batch normalization (as in [SN-GANs](https://arxiv.org/abs/1802.05957) and [SA-GANs](https://arxiv.org/abs/1805.08318)) is used in the Generator while in the discriminator you can choose between the [projection method](https://arxiv.org/abs/1802.05637) and [concatenation method](https://arxiv.org/abs/1605.05396).
+For Conditional-GANs models, in addition to the standard concatenation methods, conditional-batch normalization (as in [SN-GANs](https://arxiv.org/abs/1802.05957) and [SA-GANs](https://arxiv.org/abs/1805.08318)) is implemented in the Generator and [projection method](https://arxiv.org/abs/1802.05637) in the discriminator.
 
-The losses implemented are the standard adverserial, Hinge  and WGAN losses. The first two works quite well with spectral normalization [SN-GANs](https://arxiv.org/abs/1802.05957)
-
-The FID implementation is adapted from [mseitzer/pytorch-fid](https://github.com/mseitzer/pytorch-fid)
+The losses implemented are the standard adverserial and Hinge which work quite well with spectral normalization [SN-GANs](https://arxiv.org/abs/1802.05957)
 
 ### Prerequisites
 
 * PyTorch, version 1.0.1
 * tqdm, numpy, scipy, matplotlib
-* A Training set (e.g. ImageNet) should be added in the datasets folder (the current model uses simple geological channels images with a plan to extend it to more datasets )
-* For FID computation, a testing set should be added to datasets and its path should be added to the  file pytorch-fid/fid_score.py
+* A Training set (e.g. MNIST) should be added in the datasets folder
+
 
 
 ## Running
 
-To run unconditional GAN (note the difference G_ch and D_ch for cnn_GAN and residual_GAN)  :
+To run unconditional GAN on images in ```datasets/folder ```  and save models in ```results``` :
 ```
-python train.py --data channels --data_path datasets/Channel_train --img_ch 1 --model residual_GAN  --G_ch 52  --D_ch 32  --leak_D 0  --save_rate 5 --epoch 100 --fname Exps/channels_files/res_GAN_G52_SND_D32  --batch_size 32
+python train.py --data_path datasets/folder --data_ext txt  --img_ch 1  --zdim 128 --x_fake_GD  --batch_size 32  --epochs  160  --save_rate 2  --ema --dev_num 1  --att  --fname results 
 ```
 
 ```
