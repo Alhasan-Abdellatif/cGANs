@@ -38,7 +38,7 @@ def prepare_parser():
                        ,help = 'data path')
     parser.add_argument('--labels_path', type=str, default= None
                        ,help = 'labels path')
-    parser.add_argument('--data_ext', type=str, default='txt'
+    parser.add_argument('--data_ext', type=str, default='png'
                        ,help = 'data extension txt, png')
     parser.add_argument('--sampling', type=int, default=None
                        ,help = 'randomly sample --sampling instances from the training data if not None')
@@ -206,7 +206,7 @@ def prepare_data(args):
 
     elif  args.data == 'cifar':
         train_data = dset.CIFAR10(root='./data', train=True, download=True,
-                                   transform=stransforms.Compose([
+                                   transform=transforms.Compose([
                                        # transforms.Resize(image_size),
                                        # transforms.CenterCrop(image_size),
                                        transforms.ToTensor(),

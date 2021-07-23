@@ -207,6 +207,7 @@ def train(num_epochs=1, disc_iters=1):
             optimizerG.step()
             G_running_loss += _G_loss.item()*b_size
             
+            running_examples_D+= b_size
             running_examples_G+= b_size
             
             if args.ema:
