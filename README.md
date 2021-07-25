@@ -20,12 +20,15 @@ The losses implemented are the standard adverserial and Hinge which work quite w
 
 To run unconditional GAN on images in ```datasets/trainfolder ```  and save models in ```results``` :
 ```
-python train.py --data_path datasets/folder --data_ext txt  --img_ch 1  --zdim 128 --spec_norm_D --x_fake_GD  --batch_size 32  --epochs  160 --smooth --save_rate 2  --ema --dev_num 1  --att  --fname results 
+python train.py --data_path datasets/trainfolder --data_ext txt  --img_ch 1  --zdim 128 --spec_norm_D --x_fake_GD  --batch_size 32  --epochs  160 --smooth --save_rate 2  --ema --dev_num 1  --att  --fname results 
 ```
-To run a conditional GAN :
-
+To run a conditional GAN with o-h-e with labels saved in ```train_labels.csv```:
 ```
-python train.py --data_path datasets/trainfolder --labels_path datasets/label.csv  --data_ext txt  --img_ch 1  --zdim 128 --spec_norm_D --y_real_GD --x_fake_GD  --n_cl 4 --cgan --batch_size 32  --epochs  160 --smooth --save_rate 2  --ema --dev_num 1  --att  --fname results 
+python train.py --data_path datasets/trainfolder --labels_path datasets/train_labels.csv --data_ext txt  --img_ch 1  --zdim 128 --spec_norm_D --x_fake_GD --y_real_GD --n_cl 3 --cgan --ohe  --batch_size 32  --epochs  100 --smooth --save_rate 10  --ema --dev_num 1  --att  --fname results_cond_ohe
+```
+To run a conditional GAN with continuous labels saved in ```train_labels.csv```:
+```
+python train.py --data_path datasets/trainfolder --labels_path datasets/train_labels.csv --data_ext txt  --img_ch 1  --zdim 128 --spec_norm_D --x_fake_GD --n_cl 1 --cgan --real_cond_list 0.25 0.30 0.35 --min_label 0.25 --max_label 0.35  --batch_size 32  --epochs  100 --smooth --save_rate 10  --ema --dev_num 1  --att  --fname results_cond_cont
 ```
 
 
