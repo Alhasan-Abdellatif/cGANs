@@ -13,7 +13,8 @@ The losses implemented are the standard adverserial and Hinge which work quite w
 * tqdm, numpy, scipy, matplotlib
 * A Training set (e.g. MNIST) should be added in the datasets folder
 
-
+### Notes
+* Current model runs on images of size 64x64. larger resolutions could be added in the future.
 
 ## Running
 (For more documentation on the paramters, see utils.py)
