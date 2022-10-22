@@ -1,5 +1,8 @@
 # GANs
-This repository provides a pytorch implementation of a variety of GANs models including
+This repository provides a pytorch implementation of a variety of GANs models and it is used for the continuous conditioning work in "Generating unrepresented proportions of geological facies using Generative Adversarial Networks" https://arxiv.org/abs/2203.09639 .
+
+Implementations including:
+
 [SN-GANs](https://arxiv.org/abs/1802.05957) - with both DCGAN and Residual architecture.
 [SA-GANs](https://arxiv.org/abs/1805.08318) - which uses attention mechanism on intermeidate layers of G and D.
 
