@@ -1,6 +1,6 @@
 Pytorch implementation of GANs models used for the continuous conditioning in "Generating unrepresented proportions of geological facies using Generative Adversarial Networks" https://arxiv.org/abs/2203.09639 .
 
-Implementations including:
+Implementation includes:
 
 [SN-GANs](https://arxiv.org/abs/1802.05957) - with both DCGAN and Residual architecture.
 [SA-GANs](https://arxiv.org/abs/1805.08318) - which uses self-attention mechanism on intermeidate layers of G and D.
